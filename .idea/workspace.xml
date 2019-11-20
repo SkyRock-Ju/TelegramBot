@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dca841b8-591b-4277-855f-e608241b6334" name="Default Changelist" comment="" />
+    <list default="true" id="dca841b8-591b-4277-855f-e608241b6334" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_8_6.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/badWords.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/city.list.json.gz" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gson-2.8.6.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/Subscriber.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/Text.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherCall.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/myProject.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,18 +28,22 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/TelegramBot" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1TZlYSm13pCOhZKzsuOLsmDKUSI" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/Main" />
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gson-2.8.6.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -77,10 +98,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>
