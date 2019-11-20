@@ -8,9 +8,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Main {
 
-    private static String BOT_NAME = "ItsRainyTodayBot";
-    private static String BOT_TOKEN = "993545437:AAFeguQgNNRShMM-QeB66U8DI80lnEaiGlY" /* your bot's token here */;
-
     public static void main(String[] args) {
 
         ApiContextInitializer.init();
