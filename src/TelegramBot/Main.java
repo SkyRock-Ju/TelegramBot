@@ -13,11 +13,10 @@ public class Main {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-
             DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
             botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
-            botOptions.setProxyPort(30212);
-            botOptions.setProxyHost("192.169.201.24");
+            botOptions.setProxyPort(40865);
+            botOptions.setProxyHost("166.62.121.76");
 
             telegramBotsApi.registerBot(new WeatherBot(botOptions));
         } catch (TelegramApiException e) {

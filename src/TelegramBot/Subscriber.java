@@ -1,20 +1,18 @@
 package TelegramBot;
+import java.util.ArrayList;
 
 public class Subscriber {
+    private ArrayList<String> city = new ArrayList<>();
 
-    private int userId;
-    private String city;
-
-    public Subscriber(int userId, String city) {
-        this.userId = userId;
-        this.city = city;
+    public Subscriber(String city) {
+        this.city.add(city);
     }
 
-    public String getCity() {
+    public void addCityForSub (String city){
+        this.city.add(city);
+    }
+
+    public ArrayList<String> getCity (){
         return city;
-    }
-
-    public int getUserId() {
-        return userId;
     }
 }
