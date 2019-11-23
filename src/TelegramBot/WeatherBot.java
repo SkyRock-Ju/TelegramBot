@@ -3,19 +3,17 @@ package TelegramBot;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class WeatherBot extends TelegramLongPollingBot {
     private WeatherCall weatherParser = new WeatherCall();
-    private Map<Integer, Subscriber> subscribers = new HashMap<>();
+    private Map<Integer, Location> subscribers = new HashMap<>();
 
     public WeatherBot(DefaultBotOptions options) {
         super(options);
@@ -45,13 +43,13 @@ public class WeatherBot extends TelegramLongPollingBot {
                     sendMessage.enableMarkdown(true);
                     sendMessage.setChatId(message.getChatId().toString());
                     sendMessage.setReplyToMessageId(message.getMessageId());
-                    for (String city : subscribers.get(userId).getCity()) {
-                        sendMessage.setText(weatherParser.getReadyForecast(city));
-                        try {
-                            execute(sendMessage);
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
+                    sendMessage.setText(weatherParser.getReadyForecast(
+                            String.valueOf(Math.round(subscribers.get(userId).getLatitude())),
+                            String.valueOf(Math.round(subscribers.get(userId).getLongitude()))));
+                    try {
+                        execute(sendMessage);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
                     }
                 } else {
                     timer.cancel();
@@ -62,44 +60,43 @@ public class WeatherBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        Message message = update.getMessage();
-        if (message != null && message.hasText()) {
-            int userSubId = message.getFrom().getId();
-            if (message.getText().equals(Commands.help)) {
-                sendMsg(message, "Hello " + message.getFrom().getFirstName() + "! " + "I am weather forecast bot." + "\n" +
-                        "Write the city you want to know weather forecast with sign '/' before." + "\n" +
-                        "Example: /Moscow or /Saint Petersburg." + "\n" +
-                        "You will get 24h weather forecast." + "\n" + "\n" +
-                        "Or if you want to subscribe to weather forecast, please enter in chat: /subscribe \\\"Your City\\\"");
-            } else if (message.getText().startsWith(Commands.subscribe) &&
-                    !(weatherParser.getReadyForecast(message.getText().substring(11)).startsWith("Can't find"))) {
-                String userSubCity = message.getText().substring(11);
-                if (subscribers.containsKey(userSubId)) {
-                    subscribers.get(userSubId).addCityForSub(userSubCity);
-                    sendMsg(message, "You successfully added " + userSubCity + " city.");
-                } else {
-                    subscribers.put(userSubId, new Subscriber(userSubCity));
-                    sendMsg(message, "successfully subscribed to " + userSubCity + " city.");
-                    sendMsgToSubscriber(message, userSubId);
-                }
-            } else if (message.getText().startsWith(Commands.unsubscribe) && subscribers.containsKey(userSubId)) {
-                subscribers.remove(userSubId);
-                sendMsg(message, "Unsubscribe successful.");
-            } else {
-                sendMsg(message, weatherParser.getReadyForecast(message.getText().substring(1)));
+        if (update.hasMessage()) {
+            Message message = update.getMessage();
+            int userId = message.getFrom().getId();
+            if (message.getLocation() != null && !subscribers.containsKey(userId)) {
+                sendMsg(message, weatherParser.getReadyForecast(
+                        String.valueOf(Math.round(message.getLocation().getLatitude())),
+                        String.valueOf(Math.round(message.getLocation().getLongitude()))));
+            } else if (message.getLocation() != null && subscribers.containsKey(userId)) {
+                subscribers.put(userId, message.getLocation());
+                sendMsgToSubscriber(message, userId);
+            }
+            switch (message.getText().toLowerCase()) {
+                case (Commands.HELP):
+                    sendMsg(message, "Hello " + message.getFrom().getFirstName() + "! " +
+                            "I am weather forecast bot." + "\n" +
+                            "Please send your location to get 24 hours weather forecast." + "\n" +
+                            "Or if you want to subscribe, please enter in chat: /subscribe");
+                    break;
+                case (Commands.SUBSCRIBE):
+                    if (subscribers.containsKey(userId))
+                        sendMsg(message, "You already subscribed. Enter in chat \"/help\" for information");
+                    subscribers.put(userId, new Location());
+                    sendMsg(message, "You successfully subscribed. Now send your location.");
             }
         }
     }
 
-    @Override
-    public String getBotUsername() {
-        return "julusskyrockbot";
-    }
 
-    @Override
-    public String getBotToken() {
-        return "809926521:AAFKVXlJ7XuyLmmuzwJOxX0jp48hJhxyE_M";
+        @Override
+        public String getBotUsername () {
+            return "julusskyrockbot";
+        }
+
+        @Override
+        public String getBotToken () {
+            return "809926521:AAFKVXlJ7XuyLmmuzwJOxX0jp48hJhxyE_M";
+        }
     }
-}
 
 

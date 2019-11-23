@@ -2,8 +2,8 @@ package TelegramBot;
 
 public class Commands {
 
-    static String start = "/";
-    static String help = start + "help";
-    static String subscribe = start + "subscribe ";
-    static String unsubscribe = start + "unsubscribe";
+    final static String START = "/";
+    final static String HELP = START + "help";
+    final static String SUBSCRIBE = START + "subscribe";
+    final static String UNSUBSCRIBE = START + "unsubscribe";
 }

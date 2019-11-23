@@ -2,6 +2,7 @@ package TelegramBot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.telegram.telegrambots.meta.api.objects.Location;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,19 +17,16 @@ import java.util.Locale;
 
 public class WeatherCall {
 
-    private final static String API_CALL_TEMPLATE = "https://api.openweathermap.org/data/2.5/forecast?q=";
+    private final static String API_CALL_TEMPLATE = "https://api.openweathermap.org/data/2.5/forecast?lat=";
     private final static String API_KEY_TEMPLATE = "&units=metric&APPID=601a04d36c9166ddf3984e2013cfbaca";
     private final static String USER_AGENT = "Mozilla/5.0";
     private final static DateTimeFormatter INPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final static DateTimeFormatter OUTPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM-dd HH:mm", Locale.US);
 
-    public String getReadyForecast(String city) {
+    public String getReadyForecast(String latitude, String longitude) {
         String result;
-        StringBuffer sb = new StringBuffer(city);
-        sb.setCharAt(0, Character.toTitleCase(city.charAt(0)));
-        city = sb.toString();
         try {
-            String jsonRawData = downloadJsonRawData(city);
+            String jsonRawData = downloadJsonRawData(latitude, longitude);
             List<String> linesOfForecast = convertRawDataToList(jsonRawData);
             result = String.format("%s:%s%s", city, System.lineSeparator(), parseForecastDataFromList(linesOfForecast.subList(0, 9)));
         } catch (IllegalArgumentException e) {
@@ -40,8 +38,8 @@ public class WeatherCall {
         return result;
     }
 
-    private static String downloadJsonRawData(String city) throws Exception {
-        String urlString = API_CALL_TEMPLATE + city + API_KEY_TEMPLATE;
+    private static String downloadJsonRawData(Integer latitude, Integer longitude) throws Exception {
+        String urlString = API_CALL_TEMPLATE + latitude + "&lon=" + longitude + API_KEY_TEMPLATE;
         URL urlObject = new URL(urlString);
 
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
@@ -65,21 +63,13 @@ public class WeatherCall {
 
     private static List<String> convertRawDataToList(String data) throws Exception {
         List<String> weatherList = new ArrayList<>();
-
         JsonNode arrNode = new ObjectMapper().readTree(data).get("list");
         if (arrNode.isArray()) {
             for (final JsonNode objNode : arrNode) {
                 String forecastTime = objNode.get("dt_txt").toString();
-                if (forecastTime.contains("09:00") ||
-                        forecastTime.contains("12:00") ||
-                        forecastTime.contains("15:00") ||
-                        forecastTime.contains("18:00") ||
-                        forecastTime.contains("21:00") ||
-                        forecastTime.contains("00:00") ||
-                        forecastTime.contains("03:00") ||
-                        forecastTime.contains("06:00")) {
-                    weatherList.add(objNode.toString());
-                }
+                for (String time : TimeSet.getTimeSet())
+                    if (forecastTime.contains(time))
+                        weatherList.add(objNode.toString());
             }
         }
         return weatherList;

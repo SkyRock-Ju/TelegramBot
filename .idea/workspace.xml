@@ -2,15 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dca841b8-591b-4277-855f-e608241b6334" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/TelegramBot/Commands.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/jackson_databind_2_10_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/TimeSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/gson_2_8_6.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/city.list.json.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gson-2.8.6.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-telegram-bot-api-4.4.0.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/java-telegram-bot-api-full.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/key.pub" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/myProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/myProject.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Commands.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Commands.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Subscriber.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Subscriber.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Subscriber.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/Text.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherBot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myProject/TelegramBot/WeatherCall.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Commands.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Subscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Subscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Subscriber.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Text.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherCall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegrambots-4.4.0.1-javadoc.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegrambots-4.4.0.1-sources.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/telegrambots-4.4.0.1.jar" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,8 +55,8 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/gson-2.8.6.jar!/" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../needs/java-telegram-bot-api-full.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>

@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="java-telegram-bot-api-full">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/java-telegram-bot-api-full.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../needs/java-telegram-bot-api-full.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
