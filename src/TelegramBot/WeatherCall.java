@@ -2,9 +2,9 @@ package TelegramBot;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.telegram.telegrambots.meta.api.objects.Location;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -18,19 +18,27 @@ import java.util.Locale;
 public class WeatherCall {
 
     private final static String API_CALL_TEMPLATE = "https://api.openweathermap.org/data/2.5/forecast?lat=";
-    private final static String API_KEY_TEMPLATE = "&units=metric&APPID=601a04d36c9166ddf3984e2013cfbaca";
+    private String apiKey;
     private final static String USER_AGENT = "Mozilla/5.0";
     private final static DateTimeFormatter INPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final static DateTimeFormatter OUTPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM-dd HH:mm", Locale.US);
+
+    public WeatherCall (){
+        String apiKey;
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))){
+            apiKey = reader.readLine().split(";")[5];
+            this.apiKey = apiKey;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public String getReadyForecast(String latitude, String longitude) {
         String result;
         try {
             String jsonRawData = downloadJsonRawData(latitude, longitude);
             List<String> linesOfForecast = convertRawDataToList(jsonRawData);
-            result = String.format("%s:%s%s", city, System.lineSeparator(), parseForecastDataFromList(linesOfForecast.subList(0, 9)));
-        } catch (IllegalArgumentException e) {
-            return String.format("Can't find \"%s\" city. Try another one, for example: \"/Kyiv\" or \"/Moscow\"", city);
+            result = String.format("%s:%s", System.lineSeparator(), parseForecastDataFromList(linesOfForecast.subList(0, 9)));
         } catch (Exception e) {
             e.printStackTrace();
             return "The service is not available, please try later";
@@ -38,8 +46,8 @@ public class WeatherCall {
         return result;
     }
 
-    private static String downloadJsonRawData(Integer latitude, Integer longitude) throws Exception {
-        String urlString = API_CALL_TEMPLATE + latitude + "&lon=" + longitude + API_KEY_TEMPLATE;
+    private String downloadJsonRawData(String  latitude, String longitude) throws Exception {
+        String urlString = API_CALL_TEMPLATE + latitude + "&lon=" + longitude + apiKey;
         URL urlObject = new URL(urlString);
 
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
@@ -63,13 +71,14 @@ public class WeatherCall {
 
     private static List<String> convertRawDataToList(String data) throws Exception {
         List<String> weatherList = new ArrayList<>();
+
         JsonNode arrNode = new ObjectMapper().readTree(data).get("list");
         if (arrNode.isArray()) {
             for (final JsonNode objNode : arrNode) {
                 String forecastTime = objNode.get("dt_txt").toString();
-                for (String time : TimeSet.getTimeSet())
-                    if (forecastTime.contains(time))
-                        weatherList.add(objNode.toString());
+                if (forecastTime.contains(TimeSet.getTimeSet())) {
+                    weatherList.add(objNode.toString());
+                }
             }
         }
         return weatherList;
@@ -97,7 +106,7 @@ public class WeatherCall {
         return sb.toString();
     }
 
-    private static String formatForecastData(String dateTime, String description, double temperature) throws Exception {
+    private static String formatForecastData(String dateTime, String description, double temperature) {
         LocalDateTime forecastDateTime = LocalDateTime.parse(dateTime.replaceAll("\"", ""), INPUT_DATE_TIME_FORMAT);
         String formattedDateTime = forecastDateTime.format(OUTPUT_DATE_TIME_FORMAT);
 

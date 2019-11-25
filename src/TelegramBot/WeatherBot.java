@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,7 @@ public class WeatherBot extends TelegramLongPollingBot {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (subscribers.containsKey(userId)) {
+                if (subscribers.containsKey(userId) && subscribers.get(userId) != null) {
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.enableMarkdown(true);
                     sendMessage.setChatId(message.getChatId().toString());
@@ -88,15 +89,29 @@ public class WeatherBot extends TelegramLongPollingBot {
     }
 
 
-        @Override
-        public String getBotUsername () {
-            return "julusskyrockbot";
+    @Override
+    public String getBotUsername() {
+        String botUsername;
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))) {
+            botUsername = reader.readLine().split(";")[1];
+            return botUsername;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        @Override
-        public String getBotToken () {
-            return "809926521:AAFKVXlJ7XuyLmmuzwJOxX0jp48hJhxyE_M";
-        }
+        return null;
     }
+
+    @Override
+    public String getBotToken() {
+        String botToken;
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))) {
+            botToken = reader.readLine().split(";")[3];
+            return botToken;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
 
 

@@ -15,8 +15,8 @@ public class Main {
         try {
             DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
             botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
-            botOptions.setProxyPort(33702);
-            botOptions.setProxyHost("173.244.200.157");
+            botOptions.setProxyPort(54589);
+            botOptions.setProxyHost("192.169.244.80");
 
             telegramBotsApi.registerBot(new WeatherBot(botOptions));
         } catch (TelegramApiException e) {
