@@ -92,7 +92,7 @@ public class WeatherBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         String botUsername;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             botUsername = reader.readLine().split(";")[1];
             return botUsername;
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class WeatherBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         String botToken;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             botToken = reader.readLine().split(";")[3];
             return botToken;
         } catch (Exception e) {

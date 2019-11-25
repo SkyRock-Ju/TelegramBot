@@ -1,11 +1,11 @@
 package TelegramBot;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import WeatherApiJson.WeatherJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -23,9 +23,9 @@ public class WeatherCall {
     private final static DateTimeFormatter INPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final static DateTimeFormatter OUTPUT_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM-dd HH:mm", Locale.US);
 
-    public WeatherCall (){
+    public WeatherCall() {
         String apiKey;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\79627\\Desktop\\for me\\myProject\\src\\TelegramBot\\config"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             apiKey = reader.readLine().split(";")[5];
             this.apiKey = apiKey;
         } catch (Exception e) {
@@ -38,7 +38,7 @@ public class WeatherCall {
         try {
             String jsonRawData = downloadJsonRawData(latitude, longitude);
             List<String> linesOfForecast = convertRawDataToList(jsonRawData);
-            result = String.format("%s:%s", System.lineSeparator(), parseForecastDataFromList(linesOfForecast.subList(0, 9)));
+            result = linesOfForecast.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return "The service is not available, please try later";
@@ -46,7 +46,7 @@ public class WeatherCall {
         return result;
     }
 
-    private String downloadJsonRawData(String  latitude, String longitude) throws Exception {
+    private String downloadJsonRawData(String latitude, String longitude) throws Exception {
         String urlString = API_CALL_TEMPLATE + latitude + "&lon=" + longitude + apiKey;
         URL urlObject = new URL(urlString);
 
@@ -71,56 +71,26 @@ public class WeatherCall {
 
     private static List<String> convertRawDataToList(String data) throws Exception {
         List<String> weatherList = new ArrayList<>();
-
-        JsonNode arrNode = new ObjectMapper().readTree(data).get("list");
-        if (arrNode.isArray()) {
-            for (final JsonNode objNode : arrNode) {
-                String forecastTime = objNode.get("dt_txt").toString();
-                if (forecastTime.contains(TimeSet.getTimeSet())) {
-                    weatherList.add(objNode.toString());
-                }
+        WeatherJson weatherJson = new Gson().fromJson(data, WeatherJson.class);
+       // WeatherJson weatherJson = new ObjectMapper().readValue(data, WeatherJson.class);
+        for (WeatherApiJson.List time : weatherJson.getList()) {
+            if (TimeSet.getTimeSet().contains(time.getDtTxt().substring(10))) {
+                String formattedForecast = formatForecastData(time.getDtTxt(),time.getMain().getTemp(),time.getWeather().get(1).getMain());
+                weatherList.add(formattedForecast);
             }
         }
         return weatherList;
     }
 
-    private static String parseForecastDataFromList(List<String> weatherList) throws Exception {
-        final StringBuffer sb = new StringBuffer();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        for (String line : weatherList) {
-            String dateTime;
-            JsonNode mainMode;
-            JsonNode weatherArrNode;
-            try {
-                mainMode = objectMapper.readTree(line).get("main");
-                weatherArrNode = objectMapper.readTree(line).get("weather");
-                for (final JsonNode objNode : weatherArrNode) {
-                    dateTime = objectMapper.readTree(line).get("dt_txt").toString();
-                    sb.append(formatForecastData(dateTime, objNode.get("main").toString(), mainMode.get("temp").asDouble()));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        private static String formatForecastData (String data, double temp,String formattedDescription){
+            LocalDateTime forecastDateTime = LocalDateTime.parse(data, INPUT_DATE_TIME_FORMAT);
+            String formattedDateTime = forecastDateTime.format(OUTPUT_DATE_TIME_FORMAT);
+            String formattedTemperature;
+            if (temp>0){
+                formattedTemperature = "+" + Math.round(temp) + " C";
+            } else {
+                formattedTemperature = "-" + Math.round(temp) + " C";
             }
+            return String.format("%s   %s %s %s" + "\n", formattedDateTime, formattedTemperature, formattedDescription, System.lineSeparator());
         }
-        return sb.toString();
     }
-
-    private static String formatForecastData(String dateTime, String description, double temperature) {
-        LocalDateTime forecastDateTime = LocalDateTime.parse(dateTime.replaceAll("\"", ""), INPUT_DATE_TIME_FORMAT);
-        String formattedDateTime = forecastDateTime.format(OUTPUT_DATE_TIME_FORMAT);
-
-        String formattedTemperature;
-        long roundedTemperature = Math.round(temperature);
-        if (roundedTemperature > 0) {
-            formattedTemperature = "+" + String.valueOf(Math.round(temperature));
-        } else {
-            formattedTemperature = String.valueOf(Math.round(temperature));
-        }
-        String formattedDescription = description.replaceAll("\"", "");
-
-        String weatherIconCode = WeatherUtils.weatherIconsCodes.get(formattedDescription);
-
-        return String.format("%s   %s %s %s%s", formattedDateTime, formattedTemperature, formattedDescription, weatherIconCode, System.lineSeparator());
-    }
-}
