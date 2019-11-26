@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dca841b8-591b-4277-855f-e608241b6334" name="Default Changelist" comment="">
+    <list default="true" id="b13494b7-bd24-420c-9d40-5d4cb65d6681" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_8_61.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TelegramBot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jackson_databind_2_10_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/TimeSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/TimeSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherCall.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,28 +21,16 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="FxmlFile" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1TZlYSm13pCOhZKzsuOLsmDKUSI" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="1U7ra5ugbypaDPw3j4d59g6CKJD" />
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../needs/java-telegram-bot-api-full.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -48,7 +47,7 @@
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="TelegramBot.Main" />
-      <module name="myProject" />
+      <module name="TelegramBot" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="TelegramBot.*" />
@@ -70,11 +69,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dca841b8-591b-4277-855f-e608241b6334" name="Default Changelist" comment="" />
-      <created>1573675545153</created>
+      <changelist id="b13494b7-bd24-420c-9d40-5d4cb65d6681" name="Default Changelist" comment="" />
+      <created>1574718534900</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1573675545153</updated>
+      <updated>1574718534900</updated>
     </task>
     <servers />
   </component>
@@ -83,15 +82,31 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/TelegramBot/WeatherCall.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/TelegramBot/WeatherCall.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/TelegramBot/WeatherCall.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

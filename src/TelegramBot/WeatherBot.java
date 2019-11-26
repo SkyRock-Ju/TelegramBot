@@ -61,17 +61,20 @@ public class WeatherBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage()) {
+        if (update.hasMessage() && update.getMessage().getLocation() != null) {
             Message message = update.getMessage();
             int userId = message.getFrom().getId();
-            if (message.getLocation() != null && !subscribers.containsKey(userId)) {
+            if (subscribers.containsKey(userId) && subscribers.get(userId) == null) {
+                subscribers.put(userId, message.getLocation());
+                sendMsgToSubscriber(message, userId);
+            } else {
                 sendMsg(message, weatherParser.getReadyForecast(
                         String.valueOf(Math.round(message.getLocation().getLatitude())),
                         String.valueOf(Math.round(message.getLocation().getLongitude()))));
-            } else if (message.getLocation() != null && subscribers.containsKey(userId)) {
-                subscribers.put(userId, message.getLocation());
-                sendMsgToSubscriber(message, userId);
             }
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
+            Message message = update.getMessage();
+            int userId = message.getFrom().getId();
             switch (message.getText().toLowerCase()) {
                 case (Commands.HELP):
                     sendMsg(message, "Hello " + message.getFrom().getFirstName() + "! " +
@@ -80,10 +83,21 @@ public class WeatherBot extends TelegramLongPollingBot {
                             "Or if you want to subscribe, please enter in chat: /subscribe");
                     break;
                 case (Commands.SUBSCRIBE):
-                    if (subscribers.containsKey(userId))
-                        sendMsg(message, "You already subscribed. Enter in chat \"/help\" for information");
-                    subscribers.put(userId, new Location());
-                    sendMsg(message, "You successfully subscribed. Now send your location.");
+                    if (subscribers.containsKey(userId)) {
+                        sendMsg(message, "You already subscribed. Enter in chat \"/help\" for information.");
+                        break;
+                    } else {
+                        subscribers.put(userId, new Location());
+                        sendMsg(message, "You successfully subscribed. Now send your location.");
+                        break;
+                    }
+                case (Commands.UNSUBSCRIBE):
+                    if (subscribers.containsKey(userId)) {
+                        subscribers.remove(userId);
+                        sendMsg(message, "Successfully unsubscribed.");
+                        break;
+                    }
+                    sendMsg(message, "You are not subscriber. Enter in chat \"/help\" for information.");
             }
         }
     }
@@ -92,7 +106,7 @@ public class WeatherBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         String botUsername;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\WeatherBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             botUsername = reader.readLine().split(";")[1];
             return botUsername;
         } catch (Exception e) {
@@ -104,7 +118,7 @@ public class WeatherBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         String botToken;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\WeatherBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             botToken = reader.readLine().split(";")[3];
             return botToken;
         } catch (Exception e) {

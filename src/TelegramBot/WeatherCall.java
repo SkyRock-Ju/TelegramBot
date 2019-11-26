@@ -1,7 +1,6 @@
 package TelegramBot;
 
-import WeatherApiJson.WeatherJson;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import WeatherApiJson.WeatherJsonParse;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -25,7 +24,7 @@ public class WeatherCall {
 
     public WeatherCall() {
         String apiKey;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\sp\\Desktop\\Ju\\TelegramBot\\TelegramBot\\src\\TelegramBot\\config"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\WeatherBot\\TelegramBot\\src\\TelegramBot\\config"))) {
             apiKey = reader.readLine().split(";")[5];
             this.apiKey = apiKey;
         } catch (Exception e) {
@@ -34,16 +33,17 @@ public class WeatherCall {
     }
 
     public String getReadyForecast(String latitude, String longitude) {
-        String result;
+        String result = "";
         try {
             String jsonRawData = downloadJsonRawData(latitude, longitude);
             List<String> linesOfForecast = convertRawDataToList(jsonRawData);
-            result = linesOfForecast.toString();
+            for (int i = 0;i<linesOfForecast.size() - 1;i++)
+                result += linesOfForecast.get(i) + "\n";
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             return "The service is not available, please try later";
         }
-        return result;
     }
 
     private String downloadJsonRawData(String latitude, String longitude) throws Exception {
@@ -69,28 +69,29 @@ public class WeatherCall {
         return response.toString();
     }
 
-    private static List<String> convertRawDataToList(String data) throws Exception {
+    private static List<String> convertRawDataToList(String data) {
         List<String> weatherList = new ArrayList<>();
-        WeatherJson weatherJson = new Gson().fromJson(data, WeatherJson.class);
-       // WeatherJson weatherJson = new ObjectMapper().readValue(data, WeatherJson.class);
+        WeatherJsonParse weatherJson = new Gson().fromJson(data, WeatherJsonParse.class);
+        int lessThen24h = 0;
         for (WeatherApiJson.List time : weatherJson.getList()) {
-            if (TimeSet.getTimeSet().contains(time.getDtTxt().substring(10))) {
-                String formattedForecast = formatForecastData(time.getDtTxt(),time.getMain().getTemp(),time.getWeather().get(1).getMain());
+            if (TimeSet.getTimeSet().contains(time.getDtTxt().substring(11, 16)) && lessThen24h < 10) {
+                String formattedForecast = formatForecastData(time.getDtTxt(), time.getMain().getTemp(), time.getWeather().get(0).getDescription());
                 weatherList.add(formattedForecast);
+                lessThen24h++;
             }
         }
         return weatherList;
     }
 
-        private static String formatForecastData (String data, double temp,String formattedDescription){
-            LocalDateTime forecastDateTime = LocalDateTime.parse(data, INPUT_DATE_TIME_FORMAT);
-            String formattedDateTime = forecastDateTime.format(OUTPUT_DATE_TIME_FORMAT);
-            String formattedTemperature;
-            if (temp>0){
-                formattedTemperature = "+" + Math.round(temp) + " C";
-            } else {
-                formattedTemperature = "-" + Math.round(temp) + " C";
-            }
-            return String.format("%s   %s %s %s" + "\n", formattedDateTime, formattedTemperature, formattedDescription, System.lineSeparator());
+    private static String formatForecastData(String data, double temp, String formattedDescription) {
+        LocalDateTime forecastDateTime = LocalDateTime.parse(data, INPUT_DATE_TIME_FORMAT);
+        String formattedDateTime = forecastDateTime.format(OUTPUT_DATE_TIME_FORMAT);
+        String formattedTemperature;
+        if (temp > 0) {
+            formattedTemperature = "+" + Math.round(temp) + "℃";
+        } else {
+            formattedTemperature = Math.round(temp) + "℃";
         }
+        return String.format("%s   %s %s", formattedDateTime, formattedTemperature, formattedDescription);
     }
+}
