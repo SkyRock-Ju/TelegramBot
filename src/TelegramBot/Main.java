@@ -1,23 +1,59 @@
 package TelegramBot;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.*;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.meta.ApiContext;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class Main {
+    private static final String DATABASE_URL = "https://subscribersdatabase.firebaseio.com";
+
+    private static DatabaseReference database;
 
     public static void main(String[] args) {
+        try {
+            FileInputStream refreshToken =
+                    new FileInputStream("C:\\WeatherBot\\needs\\subscribersdatabase-firebase-adminsdk-gyx4g-9e32c12fbe.json");
+
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(refreshToken))
+                    .setDatabaseUrl(DATABASE_URL)
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("subscribers");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Object document = dataSnapshot.getValue();
+                System.out.println(document);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
             botOptions.setProxyType(DefaultBotOptions.ProxyType.SOCKS5);
-            botOptions.setProxyPort(16714);
-            botOptions.setProxyHost("166.62.85.184");
-
+            botOptions.setProxyPort(39431);
+            botOptions.setProxyHost("66.110.216.105");
             telegramBotsApi.registerBot(new WeatherBot(botOptions));
         } catch (TelegramApiException e) {
             e.printStackTrace();
