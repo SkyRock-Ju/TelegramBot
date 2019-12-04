@@ -1,5 +1,7 @@
 package TelegramBot;
 
+import Subscriber.Subscriber;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,14 +17,11 @@ import java.util.concurrent.TimeUnit;
 
 public class WeatherBot extends TelegramLongPollingBot {
     private WeatherCall weatherParser = new WeatherCall();
-    private static Map<String, GeoPoint> subscribers = new HashMap<>();
+    public static Map<String, Subscriber> subscribers = new HashMap<>();
 
     public WeatherBot(DefaultBotOptions options) {
         super(options);
-    }
-
-    public static Map<String, GeoPoint> getSubscribers() {
-        return subscribers;
+        sendMsgToSubscriber();
     }
 
     public void sendMsg(Message message, String text) {
@@ -38,25 +37,31 @@ public class WeatherBot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMsgToSubscriber(Message message, String userId) {
+    public void sendMsgToSubscriber() {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (subscribers.containsKey(userId) && subscribers.get(userId) != null) {
-                    SendMessage sendMessage = new SendMessage();
-                    sendMessage.enableMarkdown(true);
-                    sendMessage.setChatId(message.getChatId().toString());
-                    sendMessage.setReplyToMessageId(message.getMessageId());
-                    sendMessage.setText(weatherParser.getReadyForecast(
-                            String.valueOf(subscribers.get(userId).getLatitude()),//todo
-                            String.valueOf(subscribers.get(userId).getLongitude())));//todo
-                    try {
-                        execute(sendMessage);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
-                } else {
+                while (!subscribers.isEmpty()) {
+                    subscribers.forEach((userID, subscriber) -> {
+                        if (subscriber != null) {
+                            SendMessage sendMessage = new SendMessage();
+                            sendMessage.enableMarkdown(true);
+                            sendMessage.setChatId(subscriber.getChatID().toString());
+                            sendMessage.setReplyToMessageId(subscriber.getMessageID());
+                            sendMessage.setText(weatherParser.getReadyForecast(
+                                    String.valueOf(subscriber.getGeoPoint().getLatitude()),
+                                    String.valueOf(subscriber.getGeoPoint().getLongitude())));
+                            try {
+                                execute(sendMessage);
+                            } catch (TelegramApiException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+
+                if (subscribers.isEmpty()) {
                     timer.cancel();
                 }
             }
@@ -65,20 +70,31 @@ public class WeatherBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        Message message = update.getMessage();
         if (update.hasMessage() && update.getMessage().getLocation() != null) {
-            Message message = update.getMessage();
-            GeoPoint geoPoint = new GeoPoint(message.getLocation().getLatitude(),message.getLocation().getLongitude());
+            GeoPoint geoPoint = new GeoPoint(message.getLocation().getLatitude(), message.getLocation().getLongitude());
             String userID = message.getFrom().getId().toString();
+            Integer chatID = message.getFrom().getId();
             if (subscribers.containsKey(userID) && subscribers.get(userID) == null) {
-                subscribers.put(userID, geoPoint);
-                sendMsgToSubscriber(message, userID);
+                subscribers.put(userID, new Subscriber());
+                subscribers.get(userID).setChatID(chatID);
+                subscribers.get(userID).setMessageID(message.getMessageId());
+                subscribers.get(userID).setGeoPoint(geoPoint);
+                subscribers.get(userID).setUserID(message.getFrom().getId());
+                ApiFuture<WriteResult> future = Main.firestore.collection("subscribers").document(userID)
+                        .set(subscribers.get(userID));
+                try {
+                    System.out.println("Successfully updated at:" + future.get().getUpdateTime());
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
             } else {
                 sendMsg(message, weatherParser.getReadyForecast(
                         String.valueOf(geoPoint.getLatitude()),
                         String.valueOf(geoPoint.getLongitude())));
             }
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
-            Message message = update.getMessage();
+        }
+        if (update.hasMessage() && update.getMessage().hasText()) {
             String userID = message.getFrom().getId().toString();
             switch (message.getText().toLowerCase()) {
                 case (Commands.HELP):
@@ -99,6 +115,7 @@ public class WeatherBot extends TelegramLongPollingBot {
                 case (Commands.UNSUBSCRIBE):
                     if (subscribers.containsKey(userID)) {
                         subscribers.remove(userID);
+                        Main.getQuoteFromFirestore(Main.firestore, userID);
                         sendMsg(message, "Successfully unsubscribed.");
                         break;
                     }
@@ -106,7 +123,6 @@ public class WeatherBot extends TelegramLongPollingBot {
             }
         }
     }
-
 
     @Override
     public String getBotUsername() {
@@ -130,18 +146,6 @@ public class WeatherBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void getQuoteFromFirestore () throws ExecutionException, InterruptedException, IOException {
-        /*
-        DocumentReference docRef = db.collection("subscribers").document("XeeMQa1KeKCKCFoM9PO2");
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
-        if (document.exists()){
-            for(HashMap<String,Object> item:document.getData())
-        } else {
-            System.out.println("No such document!");
-        }*/
     }
 }
 

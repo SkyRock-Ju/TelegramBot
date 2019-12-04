@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b13494b7-bd24-420c-9d40-5d4cb65d6681" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/com_google_firebase_firebase_admin_6_11_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/TelegramBot/Location.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Subscriber/Subscriber.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TelegramBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TelegramBot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherCall.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherCall.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/subs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" afterDir="false" />
     </list>
