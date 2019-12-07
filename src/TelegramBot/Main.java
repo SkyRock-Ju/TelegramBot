@@ -1,7 +1,6 @@
 package TelegramBot;
 
-import Subscriber.Subscriber;
-import com.google.api.core.ApiFuture;
+import Subscriber.DatabaseEdit;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
@@ -15,7 +14,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class Main {
     private static final String DATABASE_URL = "https://subscribersdatabase.firebaseio.com";
@@ -26,7 +24,7 @@ public class Main {
 
         initializeFirebase();
         initializeTelegramBotApi();
-
+        DatabaseEdit.loadSubscribersFromFirestore(firestore);
     }
 
     public static void initializeFirebase() {
@@ -41,7 +39,6 @@ public class Main {
 
             FirebaseApp.initializeApp(options);
             firestore = FirestoreClient.getFirestore();
-            getQuoteFromFirestore(firestore);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,32 +55,6 @@ public class Main {
             telegramBotsApi.registerBot(new WeatherBot(botOptions));
         } catch (TelegramApiException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * This method have to import all subscribers from firestore and put them to WeatherBot.subscribers
-     *
-     * @param db
-     */
-    public static void getQuoteFromFirestore(Firestore db){
-        if (db.collection("subscribers") != null) {
-            db.collection("subscribers").listDocuments().forEach(documentReference -> {
-                try {
-                    WeatherBot.subscribers.put(documentReference.getId(),(Subscriber)
-                            documentReference.get().get().get(documentReference.getId()));
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-    }
-
-    public static void getQuoteFromFirestore(Firestore db, String userID) {
-        DocumentReference docRef = db.collection("subscribers").document(userID);
-        ApiFuture<WriteResult> delete = docRef.delete();
-        if (delete.isDone()){
-            System.out.println("successfully deleted at:");
         }
     }
 }

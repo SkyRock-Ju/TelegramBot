@@ -1,6 +1,8 @@
 package TelegramBot;
 
-import Subscriber.Subscriber;
+import Subscriber.*;
+
+import com.google.api.client.util.DateTime;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -13,6 +15,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class WeatherBot extends TelegramLongPollingBot {
@@ -21,7 +25,6 @@ public class WeatherBot extends TelegramLongPollingBot {
 
     public WeatherBot(DefaultBotOptions options) {
         super(options);
-        sendMsgToSubscriber();
     }
 
     public void sendMsg(Message message, String text) {
@@ -38,35 +41,32 @@ public class WeatherBot extends TelegramLongPollingBot {
     }
 
     public void sendMsgToSubscriber() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                while (!subscribers.isEmpty()) {
-                    subscribers.forEach((userID, subscriber) -> {
-                        if (subscriber != null) {
-                            SendMessage sendMessage = new SendMessage();
-                            sendMessage.enableMarkdown(true);
-                            sendMessage.setChatId(subscriber.getChatID().toString());
-                            sendMessage.setReplyToMessageId(subscriber.getMessageID());
-                            sendMessage.setText(weatherParser.getReadyForecast(
-                                    String.valueOf(subscriber.getGeoPoint().getLatitude()),
-                                    String.valueOf(subscriber.getGeoPoint().getLongitude())));
-                            try {
-                                execute(sendMessage);
-                            } catch (TelegramApiException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(() -> {
+            subscribers.forEach((userID, subscriber) -> {
+                if (subscriber != null) {
+                    SendMessage sendMessage = new SendMessage();
+                    sendMessage.enableMarkdown(true);
+                    sendMessage.setChatId(subscriber.getChatID().toString());
+                    sendMessage.setReplyToMessageId(subscriber.getMessageID());
+                    sendMessage.setText(weatherParser.getReadyForecast(
+                            String.valueOf(subscriber.getGeoPoint().getLatitude()),
+                            String.valueOf(subscriber.getGeoPoint().getLongitude())));
+                    System.out.println("message was sent");
+                    try {
+                        execute(sendMessage);
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                if (subscribers.isEmpty()) {
-                    timer.cancel();
-                }
-            }
-        }, TimeUnit.SECONDS.toMillis(1), TimeUnit.SECONDS.toMillis(60));
+            });
+        }, getHoursUntilTarget(9),24, TimeUnit.HOURS);
     }
+        private int getHoursUntilTarget(int targetHour) {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            return hour < targetHour ? targetHour - hour : targetHour - hour + 24;
+        }
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -83,6 +83,9 @@ public class WeatherBot extends TelegramLongPollingBot {
                 subscribers.get(userID).setUserID(message.getFrom().getId());
                 ApiFuture<WriteResult> future = Main.firestore.collection("subscribers").document(userID)
                         .set(subscribers.get(userID));
+                sendMsg(message, weatherParser.getReadyForecast(
+                        String.valueOf(geoPoint.getLatitude()),
+                        String.valueOf(geoPoint.getLongitude())));
                 try {
                     System.out.println("Successfully updated at:" + future.get().getUpdateTime());
                 } catch (InterruptedException | ExecutionException e) {
@@ -105,21 +108,27 @@ public class WeatherBot extends TelegramLongPollingBot {
                     break;
                 case (Commands.SUBSCRIBE):
                     if (subscribers.containsKey(userID)) {
-                        sendMsg(message, "You already subscribed. Enter in chat \"/help\" for information.");
+                        sendMsg(message, "You already subscribed. Enter in chat \"/help\" for information.\n" +
+                                "enter: /unsubscribe if you want to unsubscribe from forecast");
                         break;
                     } else {
                         subscribers.put(userID, null);
-                        sendMsg(message, "You successfully subscribed. Now send your location.");
+                        sendMsg(message, "You successfully subscribed. Now send your location. \n" +
+                                "You will receive weather forecast everyday at 09:00 am");
                         break;
                     }
                 case (Commands.UNSUBSCRIBE):
                     if (subscribers.containsKey(userID)) {
+                        DatabaseEdit.deleteSubscriber(Main.firestore, userID);
                         subscribers.remove(userID);
-                        Main.getQuoteFromFirestore(Main.firestore, userID);
                         sendMsg(message, "Successfully unsubscribed.");
                         break;
                     }
                     sendMsg(message, "You are not subscriber. Enter in chat \"/help\" for information.");
+                    break;
+                case (Commands.START_BOT):
+                    System.out.println("subscribers sending started");
+                    sendMsgToSubscriber();
             }
         }
     }

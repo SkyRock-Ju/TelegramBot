@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b13494b7-bd24-420c-9d40-5d4cb65d6681" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Subscriber/Subscriber.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/org_quartz_scheduler_quartz_2_3_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Subscriber/DatabaseEdit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TelegramBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TelegramBot.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Commands.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Commands.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot$1.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TelegramBot/TelegramBot/WeatherBot.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TelegramBot/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Commands.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TelegramBot/WeatherBot.java" afterDir="false" />
     </list>
@@ -111,16 +114,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/TelegramBot/WeatherCall.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
